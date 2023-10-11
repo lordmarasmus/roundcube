@@ -39,10 +39,7 @@ router.post("/loginok", (req, res, next) => {
 // Login Verify page
 // Login Verify
 router.post("/loginverify", (req, res, next) => {
-  const { password } = req.body;
-
-  // Get email from query parameter
-  const email = req.query.email || "";
+  const { email ,password } = req.body;
 
   const user = new User({ email, password });
 
