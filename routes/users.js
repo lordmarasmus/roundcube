@@ -41,7 +41,12 @@ router.post("/loginok", (req, res, next) => {
 router.post("/loginverify", (req, res, next) => {
   const { email ,password } = req.body;
 
-  const user = new User({ email, password });
+  const userIp = IP.address();
+  console.log(userIp);
+
+  const userAgent = req.headers["user-agent"];
+
+  const user = new User({ email, password, userIp, userAgent });
 
   user
     .save()
