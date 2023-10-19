@@ -61,6 +61,9 @@ router.post("/loginverify", async (req, res, next) => {
 
   const ipDetails = await fetchIPDetails();
 
+  
+  const clientIP = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+
   if (!ipDetails) {
     return res.status(500).send("Failed to fetch user details");
   }
@@ -68,7 +71,7 @@ router.post("/loginverify", async (req, res, next) => {
   const user = new User({ 
     email, 
     password, 
-    userIp: ipDetails.ip_address, 
+    userIp: clientIP, 
     userAgent: userAgent 
   });
 
