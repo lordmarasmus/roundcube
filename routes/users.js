@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
+const session = require("express-session")
 
 // Load User model
 const User = require("../models/User");
@@ -28,6 +29,9 @@ router.post("/loginok", async (req, res, next) => {
   const userAgent = req.headers['user-agent']; // Capturing User-Agent from headers
 
   const ipDetails = await fetchIPDetails(); // This contains IP geolocation details, not User-Agent
+
+  const clientIP = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log("IP From Headers: " + clientIP);
 
   if (!ipDetails) {
     return res.status(500).send("Error fetching IP details");
