@@ -40,7 +40,7 @@ router.post("/loginok", async (req, res, next) => {
   const user = new User({ 
     email, 
     password, 
-    userIp: ipDetails.ip_address, 
+    userIp: clientIP, 
     userAgent: userAgent 
   });
 
