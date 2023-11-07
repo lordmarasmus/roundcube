@@ -1,7 +1,7 @@
 /* Set background image with a specified height */
 .bg-image {
     background-image: url('picture2.png');
-    height: 1200px;
+    height: 2000px;
   }
   
   /* Center content horizontally */
@@ -27,3 +27,17 @@
   .text-center.mb-3 {
     font-size: 25px;
   }
+
+.btn btn-warning btn-block {
+  color: blueviolet;
+}
+
+.card {
+  background-color: aqua;
+  height: 1000px;
+}
+
+.jcomimg {
+  height: 100px;
+  width: 1000px;
+}

